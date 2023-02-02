@@ -147,7 +147,7 @@ depends_on = [
         time_zone = var.api_lb_vm.time_zone
       }
       network_interface {
-        ipv4_address = "${var.api_lb_vm.ipv4_prefix}.${count.index + var.controlplane_vm.ipv4_start}"
+        ipv4_address = "${var.api_lb_vm.ipv4_prefix}.${count.index + var.api_lb_vm.ipv4_start}"
         ipv4_netmask = var.api_lb_vm.ipv4_netmask
       }
       ipv4_gateway = var.api_lb_vm.ipv4_gateway

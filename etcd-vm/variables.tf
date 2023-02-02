@@ -118,7 +118,7 @@ variable "etcd_lb_vm" {
     memory = 2048
     disk_size = 10
     ipv4_prefix = "10.1.66"
-    ipv4_start = 23
+    ipv4_start = 21
     ipv4_netmask = "24"
     ipv4_gateway = "10.1.66.254"
     dns_server_list = ["10.1.77.15", "8.8.8.8"] 
