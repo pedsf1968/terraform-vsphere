@@ -103,7 +103,7 @@ resource "vsphere_virtual_machine" "worker_vm" {
     }
   }
 }
-
+/*
 resource "vsphere_virtual_machine" "api_lb_vm" {
   count = var.api_lb_vm_count
 depends_on = [
@@ -155,7 +155,7 @@ depends_on = [
     }
   }
 }
-
+*/
 output "controlplane_vm_info" {
   value = {
     for entry in vsphere_virtual_machine.controlplane_vm : 

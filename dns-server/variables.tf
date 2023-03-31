@@ -19,6 +19,12 @@ variable "vsphere_user" {
 variable "vsphere_password" { 
 }
 
+variable "ns_vm_count" {
+  type = number
+  description = "Number of name server"
+  default = 2
+}
+
 
 ############################################################ TEMPLATE PARAMETERS
 variable vsphere_template {
@@ -55,23 +61,25 @@ variable "dns_vm" {
     num_cpus = number
     memory = number
     disk_size = number
-    ipv4_address = string
+    ipv4_prefix = string
+    ipv4_start = number
     ipv4_netmask = string
     ipv4_gateway = string
-    dns_server_list = list(string)
+    dns_server_list = list(string) 
   })
 
   default = {
-    name = "ns1-server"
-    hostname = "ns1-server"
+    name = "ns"
+    hostname = "ns"
     domain = "hawkfund.kr"
     time_zone = "Europe/Paris"
     num_cpus = 2
     memory = 2048
     disk_size = 16
-    ipv4_address = "10.1.77.25"
+    ipv4_prefix = "10.1.77"
+    ipv4_start = 5
     ipv4_netmask = "24"
     ipv4_gateway = "10.1.77.254"
-    dns_server_list = ["10.1.77.15", "8.8.8.8"]
+    dns_server_list = ["10.1.77.5", "10.1.77.6", "8.8.8.8"]
   }
 }

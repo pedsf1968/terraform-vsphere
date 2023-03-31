@@ -51,12 +51,9 @@ resource "vsphere_virtual_machine" "proxy_vm" {
 
 output "proxy_server_vm_info" {
   value = {
-    for entry in vsphere_virtual_machine.proxy_vm : 
-    entry.name => {
-      ip = entry.default_ip_address
-      memory = entry.memory
-      num_cpus = entry.num_cpus
+      ip = vsphere_virtual_machine.proxy_vm.default_ip_address
+      memory = vsphere_virtual_machine.proxy_vm.memory
+      num_cpus = vsphere_virtual_machine.proxy_vm.num_cpus
     }
-  }
 }
 

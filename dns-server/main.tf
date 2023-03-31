@@ -1,6 +1,5 @@
-
-
 resource "vsphere_virtual_machine" "dns_vm" {
+  count = var.ns_vm_count
   depends_on = [
     data.vsphere_datacenter.datacenter,
     data.vsphere_compute_cluster.cluster,
@@ -17,7 +16,7 @@ resource "vsphere_virtual_machine" "dns_vm" {
   scsi_type        = data.vsphere_virtual_machine.vm_template.scsi_type
 
 
-  name             = var.dns_vm.name
+  name             = "${ var.dns_vm.name}${count.index+1}"
   num_cpus         = var.dns_vm.num_cpus
   memory           = var.dns_vm.memory
   
@@ -38,12 +37,12 @@ resource "vsphere_virtual_machine" "dns_vm" {
     
     customize {      
       linux_options {
-        host_name = var.dns_vm.hostname
+        host_name = "${ var.dns_vm.hostname}${count.index+1}"
         domain    = var.dns_vm.domain
         time_zone = var.dns_vm.time_zone
       }
       network_interface {
-        ipv4_address = var.dns_vm.ipv4_address
+        ipv4_address = "${var.dns_vm.ipv4_prefix}.${count.index + var.dns_vm.ipv4_start}"
         ipv4_netmask = var.dns_vm.ipv4_netmask
       }
       ipv4_gateway = var.dns_vm.ipv4_gateway
@@ -54,8 +53,11 @@ resource "vsphere_virtual_machine" "dns_vm" {
 
 output "dns_vm_info" {
   value = {
-    ip = vsphere_virtual_machine.dns_vm.default_ip_address
-    memory = vsphere_virtual_machine.dns_vm.memory
-    num_cpus = vsphere_virtual_machine.dns_vm.num_cpus
+    for entry in vsphere_virtual_machine.dns_vm :
+    entry.name => {
+      ip = entry.default_ip_address
+      memory = entry.memory
+      num_cpus = entry.num_cpus
+    }
   }
 }

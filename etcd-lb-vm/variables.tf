@@ -19,19 +19,11 @@ variable "vsphere_user" {
 variable "vsphere_password" { 
 }
 
-
-variable "etcd_vm_count" {
-  type = number
-  description = "Number of nodes for ETCD cluster"
-  default = 5
-}
-
 variable "etcd_lb_vm_count" {
   type = number
   description = "Number of load-balancer for ETCD cluster"
   default = 2
 }
-
 
 
 ############################################################ TEMPLATE PARAMETERS
@@ -42,7 +34,7 @@ variable vsphere_template {
     network = string
   })
   default = {
-    name = "T-Ubuntu-22-04-1-srv" # Name of the template to buid the new VM
+    name = "T-Ubuntu-22-04-1-srv-stretch" # Name of the template to buid the new VM
     datastore = "Datastore-03-NoRaid"  # Datastore template name
     network = "SIS" # vSphere template network
   }
@@ -61,8 +53,7 @@ variable vsphere_vm {
   }
 }
 
-# VM IP is prefix+start
-variable "etcd_vm" {
+variable "etcd_lb_vm" {
   type = object({
     name = string
     hostname = string
@@ -75,19 +66,19 @@ variable "etcd_vm" {
     ipv4_start = number
     ipv4_netmask = string
     ipv4_gateway = string
-    dns_server_list = list(string) 
+    dns_server_list = list(string)
   })
 
   default = {
-    name = "k8s-etcd"
-    hostname = "k8s-etcd"
+    name = "k8s-etcd-lb"
+    hostname = "k8s-etcd-lb"
     domain = "hawkfund.kr"
     time_zone = "Europe/Paris"
     num_cpus = 2
-    memory = 4096
-    disk_size = 16
+    memory = 2048
+    disk_size = 10
     ipv4_prefix = "10.1.66"
-    ipv4_start = 31
+    ipv4_start = 21
     ipv4_netmask = "24"
     ipv4_gateway = "10.1.66.254"
     dns_server_list = ["10.1.77.5", "10.1.77.6", "8.8.8.8"] 
